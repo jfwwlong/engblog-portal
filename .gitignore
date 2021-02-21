@@ -1,4 +1,6 @@
 /.gradle
 /.idea
-/build
 /gradle
+build
+node
+node_modules

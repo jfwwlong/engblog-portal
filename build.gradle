@@ -1,7 +1,8 @@
 plugins {
-	id 'org.springframework.boot' version '2.4.3'
+	id "com.github.node-gradle.node" version "3.0.1"
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
+	id 'org.springframework.boot' version '2.4.3'
 }
 
 group = 'com.jfwwlong.engblog'
@@ -20,6 +21,7 @@ repositories {
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 
 	compileOnly 'org.projectlombok:lombok'
@@ -35,3 +37,20 @@ dependencies {
 test {
 	useJUnitPlatform()
 }
+
+node {
+	version = '14.15.5'
+	workDir = file("${project.projectDir}/src/main/npm")
+	npmWorkDir = file("${project.projectDir}/src/main/npm")
+	nodeProjectDir = file("${project.projectDir}/src/main/npm")
+}
+
+task buildReactApp(type: NodeTask, dependsOn: 'npmInstall') {
+	script = project.file('./src/main/npm/node_modules/webpack/bin/webpack.js')
+	args = [
+			'--entry', './web/static/js/Index.jsx',
+			'-o', './build/resources/main/static/js'
+	]
+}
+
+processResources.dependsOn 'buildReactApp'
