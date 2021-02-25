@@ -14,24 +14,24 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("/api/v1")
-public class BlogController {
+public class BlogApiController {
     private static final int PAGE_SIZE = 30;
 
     private final BlogService blogService;
 
     @Autowired
-    public BlogController(final BlogService blogService) {
+    public BlogApiController(final BlogService blogService) {
         this.blogService = blogService;
     }
 
     @RequestMapping("/blogs")
     List<Blog> blogs(
-            @RequestParam(required = false) final String company,
+            @RequestParam(required = false) final List<String> companies,
             @RequestParam(required = false) final String startId
     ) {
         final Filters.FiltersBuilder filtersBuilder = Filters.builder();
-        if (company != null) {
-            filtersBuilder.company(company);
+        if (companies != null && !companies.isEmpty()) {
+            filtersBuilder.companies(companies);
         }
 
         final Filters filters = filtersBuilder.build();

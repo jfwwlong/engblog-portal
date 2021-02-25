@@ -7,9 +7,8 @@ import {makeStyles} from "@material-ui/core/styles";
 import CardHeader from '@material-ui/core/CardHeader';
 import Avatar from '@material-ui/core/Avatar';
 import {CardActionArea} from "@material-ui/core";
-import Link from "@material-ui/core/Link";
 
-var dateFormat = require("dateformat");
+const dateFormat = require("dateformat");
 
 const useStyles = makeStyles((theme) => ({
     card: {
@@ -18,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
         flexDirection: 'column',
     },
     cardMedia: {
-        paddingTop: '56.25%', // 16:9
+        paddingTop: '45%',
     },
     cardContent: {
         flexGrow: 1,
@@ -30,18 +29,6 @@ export default function BlogCard(props) {
 
     return (
         <Card className={classes.card}>
-            <CardActionArea onClick={() => window.open(props.blog.url, "_blank")}>
-                <CardMedia
-                    className={classes.cardMedia}
-                    image={props.blog.cover}
-                    title="Image title"
-                />
-                <CardContent className={classes.cardContent}>
-                    <Typography gutterBottom variant="h6" component="h2">
-                        {props.blog.title}
-                    </Typography>
-                </CardContent>
-            </CardActionArea>
             <CardHeader
                 avatar={
                     <Avatar aria-label="recipe" src={props.blog.companyIcon} />
@@ -49,6 +36,18 @@ export default function BlogCard(props) {
                 title={props.blog.company}
                 subheader={dateFormat(props.blog.pubDate, "mmm d, yyyy")}
             />
+            <CardActionArea onClick={() => window.open(props.blog.url, "_blank")}>
+                <CardMedia
+                    className={classes.cardMedia}
+                    image={props.blog.cover}
+                    title="Image title"
+                />
+                <CardContent className={classes.cardContent}>
+                    <Typography gutterBottom component="h2">
+                        {props.blog.title}
+                    </Typography>
+                </CardContent>
+            </CardActionArea>
         </Card>
     );
 }

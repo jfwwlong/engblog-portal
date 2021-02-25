@@ -5,7 +5,8 @@ import Button from "@material-ui/core/Button";
 import BlogCard from "./BlogCard";
 import React from "react";
 import {makeStyles} from "@material-ui/core/styles";
-import {Grade} from "@material-ui/icons";
+import Filters from "./Filters";
+import {Divider} from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
     icon: {
@@ -13,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
     },
     heroContent: {
         backgroundColor: theme.palette.background.paper,
-        padding: theme.spacing(8, 0, 6),
+        padding: theme.spacing(8, 0, 0),
     },
     heroButtons: {
         marginTop: theme.spacing(4),
@@ -29,11 +30,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Body(props) {
+    const companyNames = props.companies.map((company) => company.company);
 
     function loadNextPage(e) {
         e.preventDefault();
         const lastId = props.blogs[props.blogs.length - 1].id;
-        fetch(`/api/v1/blogs?startId=${lastId}`)
+        fetch(`/api/v1/blogs?startId=${lastId}&companies=${props.selectedCompanies.join()}`)
             .then(res => res.json())
             .then(data => {
                 const newBlogs = [...props.blogs];
@@ -47,33 +49,22 @@ export default function Body(props) {
 
     return (
         <main>
-            {/* Hero unit */}
             <div className={classes.heroContent}>
                 <Container maxWidth="sm">
                     <Typography component="h1" variant="h2" align="center" color="textPrimary" gutterBottom>
                         Tech Blog Portal
                     </Typography>
                     <Typography variant="h5" align="center" color="textSecondary" paragraph>
-                        All the blog posts from different tech companies
+                        All the engineering blog posts from different tech companies
                     </Typography>
-                    <div className={classes.heroButtons}>
-                        <Grid container spacing={2} justify="center">
-                            <Grid item>
-                                <Button variant="contained" color="primary">
-                                    Main call to action
-                                </Button>
-                            </Grid>
-                            <Grid item>
-                                <Button variant="outlined" color="primary">
-                                    Secondary action
-                                </Button>
-                            </Grid>
-                        </Grid>
-                    </div>
+                    <Divider/>
+                </Container>
+                <Container maxWidth="sm">
+                    <Filters companyNames={companyNames} updateBlogs={props.updateBlogs}
+                             updateSelectedCompanies={props.updateSelectedCompanies}/>
                 </Container>
             </div>
             <Container className={classes.cardGrid} maxWidth="lg">
-                {/* End hero unit */}
                 <Grid container spacing={4}>
                     {props.blogs.map(blog => (
                         <Grid item key={blog.title} xs={12} sm={6} md={4}>

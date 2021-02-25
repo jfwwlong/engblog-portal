@@ -10,12 +10,20 @@ export default class App extends React.Component {
         super(props);
         this.state = {}
         this.state.blogs = []
+        this.state.companies = []
+        this.state.selectedCompanies = []
     }
 
-    updateBlogs = (blogs) => {
-        this.setState({blogs});
-    }
     componentDidMount() {
+        fetch("/api/v1/companies")
+            .then(res => res.json())
+            .then(data => {
+                console.log(data);
+                this.setState({companies: data});
+            })
+            .catch(console.log)
+
+        console.log(this.state.companies)
         fetch("/api/v1/blogs")
             .then(res => res.json())
             .then(data => {
@@ -24,12 +32,26 @@ export default class App extends React.Component {
             .catch(console.log)
     }
 
+    updateBlogs = (blogs) => {
+        this.setState({blogs});
+    }
+
+    updateSelectedCompanies = (selectedCompanies) => {
+        this.setState({selectedCompanies});
+    }
+
     render() {
         return (
             <React.Fragment>
                 <CssBaseline/>
                 <Header/>
-                <Body blogs={this.state.blogs} updateBlogs={this.updateBlogs}/>
+                <Body
+                    blogs={this.state.blogs}
+                    companies={this.state.companies}
+                    selectedCompanies={this.state.selectedCompanies}
+                    updateBlogs={this.updateBlogs}
+                    updateSelectedCompanies={this.updateSelectedCompanies}
+                />
                 <Footer/>
             </React.Fragment>
         );

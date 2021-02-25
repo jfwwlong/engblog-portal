@@ -1,6 +1,5 @@
 package com.jfwwlong.engblog.portal.dao;
 
-import com.google.common.base.Preconditions;
 import com.jfwwlong.engblog.portal.model.Blog;
 import com.jfwwlong.engblog.portal.model.Filters;
 import org.bson.types.ObjectId;
@@ -54,14 +53,13 @@ public class BlogDao {
         final Query query = new Query();
         Criteria criteria = new Criteria();
         if (id != null && pubDate != null) {
-            criteria = criteria.andOperator(
-                    new Criteria().orOperator(
-                            Criteria.where("_id").gt(new ObjectId(id)).and(FIELD_PUB_DATE).is(pubDate.toString()),
-                            Criteria.where(FIELD_PUB_DATE).lt(pubDate.toString())
-                    ));
+            criteria = new Criteria().orOperator(
+                    Criteria.where("_id").gt(new ObjectId(id)).and(FIELD_PUB_DATE).is(pubDate.toString()),
+                    Criteria.where(FIELD_PUB_DATE).lt(pubDate.toString())
+            );
         }
-        if (filters.getCompany() != null) {
-            criteria = criteria.andOperator(Criteria.where("company").is(filters.getCompany()));
+        if (filters.getCompanies() != null && !filters.getCompanies().isEmpty()) {
+            criteria = criteria.andOperator(Criteria.where("company").in(filters.getCompanies()));
         }
 
         query.addCriteria(criteria);
