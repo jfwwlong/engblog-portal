@@ -1,6 +1,5 @@
 import React from 'react';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Footer from "./Footer";
 import Header from "./Header";
 import Body from "./Body";
 
@@ -52,7 +51,6 @@ export default class App extends React.Component {
                     updateBlogs={this.updateBlogs}
                     updateSelectedCompanies={this.updateSelectedCompanies}
                 />
-                <Footer/>
             </React.Fragment>
         );
     }

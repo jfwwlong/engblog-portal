@@ -6,17 +6,26 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Checkbox from "@material-ui/core/Checkbox";
 import ListItemText from "@material-ui/core/ListItemText";
 import React from "react";
-import {makeStyles} from "@material-ui/core/styles";
+import {makeStyles,useTheme} from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
+import Chip from "@material-ui/core/Chip";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 const useStyles = makeStyles((theme) => ({
     formControl: {
         margin: theme.spacing(1),
-        minWidth: 120,
-        maxWidth: 300,
     },
+    chips: {
+        display: 'flex',
+        flexWrap: 'wrap',
+    },
+    chip: {
+        margin: 2,
+    },
+    filterInput: {
+        minWidth: 250
+    }
 }));
 
 const MenuProps = {
@@ -28,11 +37,17 @@ const MenuProps = {
     },
     getContentAnchorEl: null
 };
-
+function getStyles(name, personName, theme) {
+    return {
+        fontWeight:
+            personName.indexOf(name) === -1
+                ? theme.typography.fontWeightRegular
+                : theme.typography.fontWeightMedium,
+    };
+}
 export default function Filters(props) {
     const classes = useStyles();
     const [personName, setPersonName] = React.useState([]);
-
     const handleChange = (event) => {
         setPersonName(event.target.value);
         fetch(`/api/v1/blogs?companies=${event.target.value.join()}`)
@@ -40,7 +55,7 @@ export default function Filters(props) {
             .then(data => {
                 props.updateBlogs(data);
             })
-            .catch(console.log)
+            .catch(console.log);
         props.updateSelectedCompanies(event.target.value);
     };
 
@@ -48,26 +63,35 @@ export default function Filters(props) {
         <Grid
             container
             direction="row"
-            justify="center">
+            justify="left">
             <FormControl className={classes.formControl}>
-                <InputLabel id="main-filters">Company</InputLabel>
-                <Select
-                    labelId="filter-checkbox-label"
-                    id="filter-mutiple-checkbox"
-                    multiple
-                    value={personName}
-                    onChange={handleChange}
-                    input={<Input/>}
-                    renderValue={(selected) => selected.join(', ')}
-                    MenuProps={MenuProps}
-                >
-                    {props.companyNames.map((name) => (
-                        <MenuItem key={name} value={name}>
-                            <Checkbox checked={personName.indexOf(name) > -1}/>
-                            <ListItemText primary={name}/>
-                        </MenuItem>
-                    ))}
-                </Select>
+            <InputLabel id="demo-mutiple-chip-label" shrink={true}>Company</InputLabel>
+            <Select
+                className={classes.filterInput}
+                labelId="filter-checkbox-label"
+                id="filter-mutiple-checkbox"
+                multiple
+                value={personName}
+                onChange={handleChange}
+                input={<Input/>}
+                renderValue={(selected) => (
+                    <div className={classes.chips}>
+                        {selected.map((value) => (
+                            <Chip key={value}
+                                  label={value}
+                                  className={classes.chip} />
+                        ))}
+                    </div>
+                )}
+                MenuProps={MenuProps}
+            >
+                {props.companyNames.sort().map((name) => (
+                    <MenuItem key={name} value={name}>
+                        <Checkbox checked={personName.indexOf(name) > -1}/>
+                        <ListItemText primary={name}/>
+                    </MenuItem>
+                ))}
+            </Select>
             </FormControl>
         </Grid>
     );

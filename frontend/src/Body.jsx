@@ -7,6 +7,7 @@ import React from "react";
 import {makeStyles} from "@material-ui/core/styles";
 import Filters from "./Filters";
 import {Divider} from "@material-ui/core";
+import Chip from '@material-ui/core/Chip';
 
 const useStyles = makeStyles((theme) => ({
     icon: {
@@ -16,11 +17,15 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: theme.palette.background.paper,
         padding: theme.spacing(8, 0, 0),
     },
+    filterContainer: {
+        marginTop: theme.spacing(4),
+        marginBottom: theme.spacing(4),
+        backgroundColor: theme.palette.background.paper,
+    },
     heroButtons: {
         marginTop: theme.spacing(4),
     },
     cardGrid: {
-        paddingTop: theme.spacing(8),
         paddingBottom: theme.spacing(4),
     },
     seeMoreGrid: {
@@ -57,13 +62,16 @@ export default function Body(props) {
                     <Typography variant="h5" align="center" color="textSecondary" paragraph>
                         All the engineering blog posts from different tech companies
                     </Typography>
-                    <Divider/>
+
                 </Container>
-                <Container maxWidth="sm">
-                    <Filters companyNames={companyNames} updateBlogs={props.updateBlogs}
-                             updateSelectedCompanies={props.updateSelectedCompanies}/>
-                </Container>
+
             </div>
+            <Container className={classes.cardGrid} maxWidth="lg">
+                <Filters companyNames={companyNames} className={classes.heroContent}
+                         updateBlogs={props.updateBlogs}
+                         selectedCompanies={props.selectedCompanies}
+                         updateSelectedCompanies={props.updateSelectedCompanies}/>
+            </Container>
             <Container className={classes.cardGrid} maxWidth="lg">
                 <Grid container spacing={4}>
                     {props.blogs.map(blog => (
