@@ -37,14 +37,7 @@ const MenuProps = {
     },
     getContentAnchorEl: null
 };
-function getStyles(name, personName, theme) {
-    return {
-        fontWeight:
-            personName.indexOf(name) === -1
-                ? theme.typography.fontWeightRegular
-                : theme.typography.fontWeightMedium,
-    };
-}
+
 export default function Filters(props) {
     const classes = useStyles();
     const [personName, setPersonName] = React.useState([]);
@@ -54,8 +47,7 @@ export default function Filters(props) {
             .then(res => res.json())
             .then(data => {
                 props.updateBlogs(data);
-            })
-            .catch(console.log);
+            });
         props.updateSelectedCompanies(event.target.value);
     };
 

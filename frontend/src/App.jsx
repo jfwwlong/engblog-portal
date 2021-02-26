@@ -17,18 +17,14 @@ export default class App extends React.Component {
         fetch("/api/v1/companies")
             .then(res => res.json())
             .then(data => {
-                console.log(data);
                 this.setState({companies: data});
-            })
-            .catch(console.log)
+            });
 
-        console.log(this.state.companies)
         fetch("/api/v1/blogs")
             .then(res => res.json())
             .then(data => {
                 this.setState({blogs: data});
             })
-            .catch(console.log)
     }
 
     updateBlogs = (blogs) => {

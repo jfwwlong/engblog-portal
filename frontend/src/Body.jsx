@@ -47,7 +47,6 @@ export default function Body(props) {
                 newBlogs.push(...data);
                 props.updateBlogs(newBlogs);
             })
-            .catch(console.log)
     }
 
     const classes = useStyles();
@@ -74,8 +73,8 @@ export default function Body(props) {
             </Container>
             <Container className={classes.cardGrid} maxWidth="lg">
                 <Grid container spacing={4}>
-                    {props.blogs.map(blog => (
-                        <Grid item key={blog.title} xs={12} sm={6} md={4}>
+                    {props.blogs.map((blog, index) => (
+                        <Grid item key={index} xs={12} sm={6} md={4}>
                             <BlogCard blog={blog}/>
                         </Grid>
                     ))}
